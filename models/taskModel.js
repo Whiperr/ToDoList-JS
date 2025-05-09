@@ -1,45 +1,49 @@
-const fs = require('fs');
-const path = require('path');
+const db = require('../db/database');
 
-const dataPath = path.join(__dirname, '../data/tasks.json');
-
-// Pomocnicze funkcje
-const loadTasks = () => {
-    const fileData = fs.readFileSync(dataPath);
-    return JSON.parse(fileData);
-};
-
-const saveTasks = (tasks) => {
-    fs.writeFileSync(dataPath, JSON.stringify(tasks, null, 2));
-};
-
+// Pobierz wszystkie zadania
 exports.getAllTasks = () => {
-    return loadTasks();
+    const stmt = db.prepare('SELECT * FROM tasks');
+    return stmt.all().map(row => ({
+        ...row,
+        completed: !!row.completed
+    }));
 };
 
-exports.createTask = (taskData) => {
-    const tasks = loadTasks();
-    const newTask = {
-        id: Date.now().toString(),
-        title: taskData.title,
+// Dodaj nowe zadanie
+exports.createTask = ({ title }) => {
+    const stmt = db.prepare('INSERT INTO tasks (title) VALUES (?)');
+    const info = stmt.run(title);
+    return {
+        id: info.lastInsertRowid,
+        title,
         completed: false
     };
-    tasks.push(newTask);
-    saveTasks(tasks);
-    return newTask;
 };
 
-exports.updateTask = (id, taskData) => {
-    const tasks = loadTasks();
-    const index = tasks.findIndex(t => t.id === id);
-    if (index === -1) throw new Error('Task not found');
-    tasks[index] = { ...tasks[index], ...taskData };
-    saveTasks(tasks);
-    return tasks[index];
+// Aktualizuj zadanie
+exports.updateTask = (id, data) => {
+    const task = exports.getTaskById(id);
+    if (!task) throw new Error('Task not found');
+
+    const updatedTitle = data.title ?? task.title;
+    const updatedCompleted = data.completed ?? task.completed;
+
+    const stmt = db.prepare('UPDATE tasks SET title = ?, completed = ? WHERE id = ?');
+    stmt.run(updatedTitle, updatedCompleted ? 1 : 0, id);
+
+    return { id, title: updatedTitle, completed: !!updatedCompleted };
 };
 
+// Usuń zadanie
 exports.deleteTask = (id) => {
-    let tasks = loadTasks();
-    tasks = tasks.filter(t => t.id !== id);
-    saveTasks(tasks);
+    const stmt = db.prepare('DELETE FROM tasks WHERE id = ?');
+    stmt.run(id);
+};
+
+// Pobierz jedno zadanie (pomocniczo)
+exports.getTaskById = (id) => {
+    const stmt = db.prepare('SELECT * FROM tasks WHERE id = ?');
+    const task = stmt.get(id);
+    if (!task) return null;
+    return { ...task, completed: !!task.completed };
 };

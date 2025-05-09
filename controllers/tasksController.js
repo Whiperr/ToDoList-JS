@@ -1,25 +1,37 @@
 const taskModel = require('../models/taskModel');
 
-// Pobierz wszystkie zadania
-exports.getTasks = (req, res) => {
-    const tasks = taskModel.getAllTasks();
-    res.json(tasks);
+exports.getTasks = (req, res, next) => {
+    try {
+        const tasks = taskModel.getAllTasks();
+        res.json(tasks);
+    } catch (err) {
+        next(err);
+    }
 };
 
-// Dodaj nowe zadanie
-exports.createTask = (req, res) => {
-    const newTask = taskModel.createTask(req.body);
-    res.status(201).json(newTask);
+exports.createTask = (req, res, next) => {
+    try {
+        const task = taskModel.createTask(req.body);
+        res.status(201).json(task);
+    } catch (err) {
+        next(err);
+    }
 };
 
-// Aktualizuj zadanie
-exports.updateTask = (req, res) => {
-    const updatedTask = taskModel.updateTask(req.params.id, req.body);
-    res.json(updatedTask);
+exports.updateTask = (req, res, next) => {
+    try {
+        const task = taskModel.updateTask(req.params.id, req.body);
+        res.json(task);
+    } catch (err) {
+        next(err);
+    }
 };
 
-// Usuń zadanie
-exports.deleteTask = (req, res) => {
-    taskModel.deleteTask(req.params.id);
-    res.status(204).send();
+exports.deleteTask = (req, res, next) => {
+    try {
+        taskModel.deleteTask(req.params.id);
+        res.status(204).send();
+    } catch (err) {
+        next(err);
+    }
 };
