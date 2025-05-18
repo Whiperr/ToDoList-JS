@@ -14,6 +14,7 @@ app.use('/api/tasks', taskRoutes);
 app.use(errorHandler);
 
 // Start servera
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+const PORTLISEN = process.env.PORT || 3001;
+app.listen(PORTLISEN, () =>
+    console.log(`API server listening at http://localhost:${PORTLISEN}`)
+);

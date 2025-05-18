@@ -1,0 +1,179 @@
+/* Global styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+/* Main container */
+.App {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Header */
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+/* Add form */
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+form input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+form input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+form button {
+  padding: 10px 14px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+form button:hover {
+  background: #0056b3;
+}
+
+/* Error message under form */
+.error-msg {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+/* API error banner */
+.api-error {
+  background: #fdecea;
+  color: #c0392b;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Task list */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.3s;
+}
+li:hover {
+  background: #f0f0f0;
+}
+li.done {
+  background: #e0ffe0;
+}
+li.done span {
+  text-decoration: line-through;
+  color: #888;
+}
+li input[type="checkbox"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  align-self: center;
+  appearance: auto;
+}
+
+li span {
+  flex: 1 1 auto;        /* pozwala elementowi ciąć się oraz rosnąć w ramach flex */
+  min-width: 0;          /* konieczne, żeby flex-item mógł się kurczyć poniżej swojej zawartości */
+  font-size: 16px;
+  white-space: normal;   /* zezwala na łamanie wierszy */
+  overflow-wrap: break-word; /* długie słowa łamie w następnym możliwym miejscu */
+  word-break: break-word;    /* dodatkowe wsparcie dla starszych przeglądarek */
+}
+
+/* Delete button */
+li button {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+li button:hover {
+  background: #c0392b;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.filters button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.filters button:hover {
+  background: #f0f0f0;
+}
+.filters button.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  form {
+    flex-direction: column;
+  }
+  form button {
+    width: 100%;
+  }
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  li button {
+    margin-top: 8px;
+    align-self: flex-end;
+  }
+}
